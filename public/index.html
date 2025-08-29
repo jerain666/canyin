@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,81 +7,62 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>店铺投资计算器</h1>
-    <p>一次性成本 · 毛利率 · 盈亏平衡点 · 回本周期</p>
-  </header>
-
-  <main class="dashboard">
-    <!-- 左列：成本 -->
-    <section class="card">
-      <h2>开店成本</h2>
-      <div class="fields">
-        <label>装修费 <input type="number" id="cost-decor" value="0"></label>
-        <label>设备费 <input type="number" id="cost-equip" value="0"></label>
-        <label>首批原料 <input type="number" id="cost-material" value="0"></label>
-        <label>房租押金 <input type="number" id="cost-rent" value="0"></label>
-        <label>证件办理 <input type="number" id="cost-license" value="0"></label>
-        <label>其他 <input type="number" id="cost-other" value="0"></label>
+  <div class="container">
+    <!-- 左边：Excel 表格 -->
+    <aside class="left-panel">
+      <h2>店铺投资说明表</h2>
+      <div class="table-wrapper">
+        <!-- 表格 HTML 将嵌入这里 -->
+        <!--#include file="excel_table.html" -->
       </div>
+    </aside>
+
+    <!-- 右边：计算器 -->
+    <main class="right-panel">
+      <h2>投资计算器</h2>
+      <form id="calc-form">
+        <div class="form-group">
+          <label>押金/转让费:</label>
+          <input type="number" id="deposit" value="0">
+        </div>
+        <div class="form-group">
+          <label>装修费用:</label>
+          <input type="number" id="decoration" value="0">
+        </div>
+        <div class="form-group">
+          <label>设备投入:</label>
+          <input type="number" id="equipment" value="0">
+        </div>
+        <div class="form-group">
+          <label>首批物料:</label>
+          <input type="number" id="materials" value="0">
+        </div>
+        <div class="form-group">
+          <label>3个月房租:</label>
+          <input type="number" id="rent" value="0">
+        </div>
+        <div class="form-group">
+          <label>预支人工费:</label>
+          <input type="number" id="staff" value="0">
+        </div>
+        <div class="form-group">
+          <label>营销投入:</label>
+          <input type="number" id="marketing" value="0">
+        </div>
+        <div class="form-group">
+          <label>预备金:</label>
+          <input type="number" id="reserve" value="0">
+        </div>
+      </form>
+
       <div class="result">
-        <div>总投资：<span id="total-cost">0</span> 元</div>
+        <h3>计算结果</h3>
+        <p id="total">总投资: 0 元</p>
+        <p id="breakeven">盈亏平衡点: -</p>
+        <p id="payback">回本周期: -</p>
       </div>
-    </section>
-
-    <!-- 中列：毛利率 -->
-    <section class="card small">
-      <h2>毛利率</h2>
-      <div class="fields">
-        <label>单价 <input type="number" id="price" value="0"></label>
-        <label>食材成本 <input type="number" id="cost-food" value="0"></label>
-        <label>包装成本 <input type="number" id="cost-package" value="0"></label>
-      </div>
-      <div class="result">
-        <div>单份毛利：<span id="gross-profit">0</span> 元</div>
-        <div>毛利率：<span id="gross-margin">0%</span></div>
-      </div>
-    </section>
-
-    <!-- 中列：盈亏平衡点 -->
-    <section class="card small">
-      <h2>盈亏平衡点</h2>
-      <div class="fields">
-        <label>房租(月) <input type="number" id="fixed-rent" value="0"></label>
-        <label>人工(月) <input type="number" id="fixed-labor" value="0"></label>
-        <label>能耗(月) <input type="number" id="fixed-energy" value="0"></label>
-        <label>其他(月) <input type="number" id="fixed-other" value="0"></label>
-      </div>
-      <div class="result">
-        <div>每日需营业额：<span id="breakeven-day">0</span> 元</div>
-        <div>每月需营业额：<span id="breakeven-month">0</span> 元</div>
-      </div>
-    </section>
-
-    <!-- 右列：回本周期 -->
-    <section class="card">
-      <h2>回本周期</h2>
-      <div class="fields">
-        <label>预计月营业额 <input type="number" id="monthly-sales" value="0"></label>
-        <label>税费率(%) <input type="number" id="tax-rate" value="0"></label>
-      </div>
-      <div class="result">
-        <div>月毛利：<span id="monthly-gross">0</span> 元</div>
-        <div>月净利：<span id="monthly-net">0</span> 元</div>
-        <div>预计回本：<span id="payback">0</span> 个月</div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="actions">
-      <label class="file">导入Excel <input type="file" id="import-excel" accept=".xlsx,.xls"></label>
-      <button id="export-excel">导出Excel</button>
-      <button class="danger" id="reset">重置</button>
-    </div>
-    <div class="hint">支持从Excel导入/导出，自动保存本地输入</div>
-  </footer>
-
-  <script src="script.js"></script>
+    </main>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>
