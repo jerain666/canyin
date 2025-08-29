@@ -1,109 +1,62 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>店铺投资计算器</title>
-  <meta name="description" content="基于模板的店铺投资/毛利/盈亏平衡/回本周期计算器（适用于 Cloudflare Pages / Vercel 静态托管）" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="container">
-  <h1>🏪 店铺投资计算器</h1>
-  <p class="subtle">根据《店铺投资计算公式》模板，快速测算建店投入、毛利率、盈亏平衡点与回本周期。</p>
-</header>
-
-<main class="container grid">
-  <!-- 建店成本 -->
-  <section class="card">
-    <h2>① 建店成本（一次性投入）</h2>
-    <div class="fields">
-      <h3>押金/转让费</h3>
-      <label>转让费 <input type="number" id="transferFee" min="0" step="0.01" placeholder="0" /></label>
-      <label>房租押金 <input type="number" id="rentDeposit" min="0" step="0.01" placeholder="0" /></label>
-      <h3>固定成本</h3>
-      <label>技术学习费 <input type="number" id="trainingCost" min="0" step="0.01" placeholder="0" /></label>
-      <label>装修 <input type="number" id="decoration" min="0" step="0.01" placeholder="0" /></label>
-      <label>广告 <input type="number" id="advertising" min="0" step="0.01" placeholder="0" /></label>
-      <label>设备 <input type="number" id="equipment" min="0" step="0.01" placeholder="0" /></label>
-      <h3>经营成本（开业前准备）</h3>
-      <label>首批物料 <input type="number" id="initialMaterials" min="0" step="0.01" placeholder="0" /></label>
-      <label>3个月店租 <input type="number" id="rent3m" min="0" step="0.01" placeholder="0" /></label>
-      <label>人工工资（预支）<input type="number" id="preWages" min="0" step="0.01" placeholder="0" /></label>
-      <label>营销费用 <input type="number" id="marketing" min="0" step="0.01" placeholder="0" /></label>
-      <label>预备资金 <input type="number" id="reserve" min="0" step="0.01" placeholder="0" /></label>
+  <div class="container">
+    <h2>店铺投资计算表</h2>
+    <div class="table-wrapper">
+      <!-- 这里直接放 Excel 转换出来的 HTML 表格 -->
+      <!--#include file="excel_table.html" -->
     </div>
+
+    <h2>投资计算器</h2>
+    <form id="calc-form" class="grid-form">
+      <div class="form-group">
+        <label>押金/转让费:</label>
+        <input type="number" id="deposit" value="0">
+      </div>
+      <div class="form-group">
+        <label>装修费用:</label>
+        <input type="number" id="decoration" value="0">
+      </div>
+      <div class="form-group">
+        <label>设备投入:</label>
+        <input type="number" id="equipment" value="0">
+      </div>
+      <div class="form-group">
+        <label>首批物料:</label>
+        <input type="number" id="materials" value="0">
+      </div>
+      <div class="form-group">
+        <label>3个月房租:</label>
+        <input type="number" id="rent" value="0">
+      </div>
+      <div class="form-group">
+        <label>预支人工费:</label>
+        <input type="number" id="staff" value="0">
+      </div>
+      <div class="form-group">
+        <label>营销投入:</label>
+        <input type="number" id="marketing" value="0">
+      </div>
+      <div class="form-group">
+        <label>预备金:</label>
+        <input type="number" id="reserve" value="0">
+      </div>
+    </form>
+
     <div class="result">
-      <div>总计资金（含押金/转让费）：<span id="totalCap">0</span></div>
-      <div>开业前总成本（不含押金/转让费）：<span id="preOpenCost">0</span></div>
+      <h3>计算结果</h3>
+      <p id="total">总投资: 0 元</p>
+      <p id="breakeven">盈亏平衡点: -</p>
+      <p id="payback">回本周期: -</p>
     </div>
-  </section>
-
-  <!-- 毛利率 -->
-  <section class="card">
-    <h2>② 毛利率</h2>
-    <div class="fields">
-      <label>单价（¥/份）<input type="number" id="unitPrice" min="0" step="0.01" placeholder="0" /></label>
-      <label>食材成本（¥/份）<input type="number" id="foodCost" min="0" step="0.01" placeholder="0" /></label>
-      <label>包装成本（¥/份）<input type="number" id="packageCost" min="0" step="0.01" placeholder="0" /></label>
-    </div>
-    <div class="result">
-      <div>毛利额（¥/份）：<span id="grossPerUnit">0</span></div>
-      <div>毛利率：<span id="grossMargin">0%</span></div>
-    </div>
-  </section>
-
-  <!-- 盈亏平衡点 -->
-  <section class="card">
-    <h2>③ 盈亏平衡点</h2>
-    <div class="fields">
-      <label>每日房租（¥/天）<input type="number" id="rentDaily" min="0" step="0.01" placeholder="0" /></label>
-      <label>每日人工（¥/天）<input type="number" id="wageDaily" min="0" step="0.01" placeholder="0" /></label>
-      <label>每日能源（¥/天）<input type="number" id="energyDaily" min="0" step="0.01" placeholder="0" /></label>
-      <label>每日其他（¥/天）<input type="number" id="otherDaily" min="0" step="0.01" placeholder="0" /></label>
-      <label>每月营业天数（天）<input type="number" id="daysPerMonth" min="1" step="1" value="30" /></label>
-    </div>
-    <div class="result">
-      <div>每月运营成本：<span id="opexMonthly">0</span></div>
-      <div>盈亏平衡点（需达到的月营业额）：<span id="breakevenRevenue">0</span></div>
-      <div>盈亏平衡点（需达到的日营业额）：<span id="breakevenDailyRevenue">0</span></div>
-      <div class="hint">公式：盈亏平衡点 =（房租+人工+能源+其他）/ 毛利率</div>
-    </div>
-  </section>
-
-  <!-- 回本周期 -->
-  <section class="card">
-    <h2>④ 回本周期</h2>
-    <div class="fields">
-      <label>预计月营业额（¥）<input type="number" id="revenueMonthly" min="0" step="0.01" placeholder="0" /></label>
-      <label>食材+包装占比（%）<input type="number" id="cogsPct" min="0" max="100" step="0.01" placeholder="按毛利率自动带入，可覆盖" /></label>
-      <label>其他运营成本（¥/月）<input type="number" id="otherOpexMonthly" min="0" step="0.01" placeholder="除房租/人工/能源之外" /></label>
-      <label>税费占比（%）<input type="number" id="taxPct" min="0" max="100" step="0.01" value="0" /></label>
-    </div>
-    <div class="result">
-      <div>月毛利：<span id="grossMonthly">0</span></div>
-      <div>月净利润：<span id="netMonthly">0</span></div>
-      <div>回本周期（月）：<span id="paybackMonths">∞</span></div>
-    </div>
-  </section>
-</main>
-
-<footer class="container footer">
-  <div class="actions">
-    <button id="saveBtn">保存参数</button>
-    <button id="loadBtn">载入参数</button>
-    <button id="resetBtn" class="danger">清空</button>
-    <button id="exportBtn">导出 JSON</button>
-    <label class="file">
-      导入 JSON <input type="file" id="importFile" accept="application/json" />
-    </label>
   </div>
-  <p class="subtle">公式依据：毛利率=（营业额-食材-包装）/营业额；盈亏平衡点=（房租+人工+能源+杂项）/毛利率；回本周期=开业前总成本（不含押金/转让费）/每月净利润。</p>
-</footer>
-
-<script src="./app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
